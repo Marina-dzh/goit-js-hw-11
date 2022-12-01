@@ -14,16 +14,17 @@ const refs = {
     guard: document.querySelector(".js-guard")
 };
 
-
-let page = 1;
-let gallery =  new SimpleLightbox('.gallery a',);
-let observer = new IntersectionObserver(onScroll, options);
-
 let options = {
   root: null,
   rootMargin: '200px',
   threshold: 1.0
 };
+
+let page = 1;
+let gallery =  new SimpleLightbox('.gallery a',);
+let observer = new IntersectionObserver(onScroll, options);
+
+
 
 refs.form.addEventListener('submit', onSearch);
 
