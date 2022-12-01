@@ -1,15 +1,10 @@
 
 import './css/styles.css';
 import Notiflix from 'notiflix';
-import { fetchImages } from './fetchImages'
-
-// Описаний в документації
+import { fetchImages } from './fetchImages';
 import SimpleLightbox from "simplelightbox";
-// Додатковий імпорт стилів
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-
-let gallery =  new SimpleLightbox('.gallery a',);
 const refs = {
     input: document.querySelector('[name="searchQuery"]'),
     list: document.querySelector('.gallery'),
@@ -20,27 +15,25 @@ const refs = {
 };
 
 
+let page = 1;
+let gallery =  new SimpleLightbox('.gallery a',);
+let observer = new IntersectionObserver(onScroll, options);
+
 let options = {
   root: null,
   rootMargin: '200px',
   threshold: 1.0
-}
+};
 
-let observer = new IntersectionObserver(onScroll, options);
+refs.form.addEventListener('submit', onSearch);
+
 function onScroll(entries, observer) {
-
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       console.log("tada")
       onLoad()
   }}
-  )
-  
-}
-let page = 1
-
-refs.form.addEventListener('submit', onSearch);
-
+  )};
 
 function onSearch(e) {
   refs.list.innerHTML = ""
@@ -56,14 +49,11 @@ function onSearch(e) {
       
       Notiflix.Notify.info(`Hooray! We found ${data.totalHits} images.`);
     }).catch(error => { Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.') });
-  
-  
-}
+};
+
 
 function createMarkup(arr) {
- 
-  return arr.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => `<a class="gallery__item" href="${largeImageURL}"><div class="photo-card">
-     
+  return arr.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => `<a class="gallery__item" href="${largeImageURL}"><div class="photo-card"> 
   <div class="thumb"><img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy"/></div>
   <div class="info">
     <p class="info-item">
@@ -80,21 +70,17 @@ function createMarkup(arr) {
     </p>
   </div>
 </div></a>`).join("");
-  
-    
-}
+};
+
+
 function onLoad() {
   page += 1;
-  
   const query = refs.input.value.trim()
-  console.log("hujhuh")
   fetchImages(query,page)
     .then(data => {
       refs.list.insertAdjacentHTML("beforeend", createMarkup(data.hits));
       gallery.refresh();
-      
     }).catch(console.error())
-  
   }
   
 
